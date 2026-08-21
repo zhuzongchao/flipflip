@@ -1,0 +1,55 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build",
+      "type": "npm",
+      "script": "build",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": [],
+      "options": {
+        "env": {
+          "NODE_OPTIONS": "--openssl-legacy-provider"
+        }
+      }
+    },
+    {
+      "label": "development (watch)",
+      "type": "npm",
+      "script": "development",
+      "isBackground": true,
+      "problemMatcher": [],
+      "options": {
+        "env": {
+          "NODE_OPTIONS": "--openssl-legacy-provider"
+        }
+      }
+    },
+    {
+      "label": "production",
+      "type": "npm",
+      "script": "production",
+      "problemMatcher": [],
+      "options": {
+        "env": {
+          "NODE_OPTIONS": "--openssl-legacy-provider"
+        }
+      }
+    },
+    {
+      "label": "start app",
+      "type": "shell",
+      "command": "npx electron ./dist/main.bundle.js",
+      "problemMatcher": [],
+      "options": {
+        "env": {
+          "NODE_OPTIONS": null,
+          "ELECTRON_RUN_AS_NODE": null
+        }
+      }
+    }
+  ]
+}
