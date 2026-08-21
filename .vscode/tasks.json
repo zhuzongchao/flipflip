@@ -9,35 +9,20 @@
         "kind": "build",
         "isDefault": true
       },
-      "problemMatcher": [],
-      "options": {
-        "env": {
-          "NODE_OPTIONS": "--openssl-legacy-provider"
-        }
-      }
+      "problemMatcher": []
     },
     {
       "label": "development (watch)",
       "type": "npm",
       "script": "development",
       "isBackground": true,
-      "problemMatcher": [],
-      "options": {
-        "env": {
-          "NODE_OPTIONS": "--openssl-legacy-provider"
-        }
-      }
+      "problemMatcher": []
     },
     {
       "label": "production",
       "type": "npm",
       "script": "production",
-      "problemMatcher": [],
-      "options": {
-        "env": {
-          "NODE_OPTIONS": "--openssl-legacy-provider"
-        }
-      }
+      "problemMatcher": []
     },
     {
       "label": "start app",

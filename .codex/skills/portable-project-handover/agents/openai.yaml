@@ -1,0 +1,4 @@
+interface:
+  display_name: "Portable Project Handover"
+  short_description: "Keep project context portable across computers and AI sessions."
+  default_prompt: "Use $portable-project-handover to initialize or update this project handover document."

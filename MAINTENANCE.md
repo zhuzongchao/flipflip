@@ -12,14 +12,7 @@
 
 ## 环境须知（重要，AI 助手必读）
 
-1. **构建必须带环境变量**（webpack 4 的 md4 哈希在 Node 17+ 报
-   `ERR_OSSL_EVP_UNSUPPORTED`）：
-
-   ```bash
-   NODE_OPTIONS=--openssl-legacy-provider npx yarn build
-   ```
-
-   Windows cmd 下：`set NODE_OPTIONS=--openssl-legacy-provider && npx yarn build`
+1. **构建无需 legacy-provider**：webpack 5 已移除 webpack 4 的 md4 哈希兼容问题。
    VS Code 里用任务（`.vscode/tasks.json` 已配好）：`Ctrl+Shift+B`
 
 2. **启动应用时必须清掉这两个变量**（Electron 4 内置 Node 10，
@@ -41,7 +34,7 @@
 
 > 原则：一次只升一个东西，升完必须构建 + 启动验证通过再 commit。
 
-- [ ] **T1: webpack 4 → 5**（预计同时消灭 md4 报错，删除所有 legacy-provider 变通）
+- [x] **T1: webpack 4 → 5**（已完成，webpack 5 使用默认哈希，无需 legacy-provider）
   - 涉及：webpack、webpack-cli、html-webpack-plugin、css/sass/style-loader、
     ts-loader、workerize-loader（注意此库可能不兼容，需找替代）
 - [ ] **T2: TypeScript 4.1 → 5.x**
@@ -61,7 +54,7 @@
 ```
 在 <分支名> 分支上：<具体任务描述>。
 完成后运行构建验证：
-  NODE_OPTIONS=--openssl-legacy-provider npx yarn build
+  npx yarn build
 要求：构建零报错。不要顺手升级本任务之外的依赖。
 ```
 
