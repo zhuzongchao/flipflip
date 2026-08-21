@@ -1,7 +1,7 @@
 import * as React from "react";
 import clsx from "clsx";
 import * as fs from "fs";
-import {remote} from "electron";
+import * as remote from "@electron/remote";
 
 import {
   AppBar,

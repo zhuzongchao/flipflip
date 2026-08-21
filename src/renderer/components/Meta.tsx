@@ -1,4 +1,5 @@
-import {remote, ipcRenderer, IpcMessageEvent} from 'electron';
+import {remote} from '@electron/remote';
+import {ipcRenderer, IpcMessageEvent} from 'electron';
 import * as React from 'react';
 
 import {

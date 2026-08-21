@@ -1,4 +1,4 @@
-import {remote} from "electron";
+import * as remote from "@electron/remote";
 import {URL} from "url";
 import path from 'path';
 import * as fs from "fs";

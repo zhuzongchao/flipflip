@@ -195,6 +195,7 @@ const AF = { // add functions
 const IPC = {
   newWindow: 'ipc.newWindow',
   startScene: 'ipc.startScene',
+  clearCache: 'ipc.clearCache',
 };
 
 const MO = { // Menu/Modal Constants

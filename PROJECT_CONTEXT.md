@@ -4,14 +4,14 @@
 
 - Purpose: FlipFlip desktop Electron application for organizing and playing image, video, audio, and script scenes.
 - Users: FlipFlip users and maintainers.
-- Current objective: Maintain the webpack 5 build chain; T1 and T2 are complete.
+- Current objective: Electron compatibility migration T3.1 on the `upgrade-electron` branch.
 - Repository root: This directory.
 
 ## Scope And Constraints
 
 - Confirmed requirements: Upgrade webpack and directly related build loaders/plugins; verify build and app startup.
-- Non-goals: Do not upgrade Electron, TypeScript, React, or runtime dependencies in T1.
-- Compatibility and delivery constraints: Windows development; Electron 4 runtime; webpack 5 must build both main and renderer bundles.
+- Non-goals: Do not change dependencies outside Electron and `@electron/remote`; T3.2-T3.4 remain out of scope.
+- Compatibility and delivery constraints: Windows development; Electron 43.4.1 runtime; webpack 5 must build both main and renderer bundles.
 - Quality and safety rules: Keep changes focused and preserve existing behavior.
 
 ## Directory Map
@@ -22,7 +22,7 @@
 | `src/renderer` | React renderer application | Bundled to `dist/renderer.bundle.js` |
 | `webpack.dev.js` | Development webpack configuration | Multi-compiler config |
 | `webpack.prod.js` | Production webpack configuration | Multi-compiler config |
-| `MAINTENANCE.md` | Maintenance roadmap and task list | T1 is active |
+| `MAINTENANCE.md` | Maintenance roadmap and task list | T3.1 status |
 | `dist` | Generated bundles | Recreated by build scripts |
 
 ## Architecture And Data Flow
@@ -44,7 +44,7 @@
 ## Active Artifacts
 
 - Source input: `src/`.
-- Editable baseline: `master` at the current checkout.
+- Editable baseline: `upgrade-electron` at the T3.1 working tree.
 - Latest output: `dist/` (generated).
 - Latest delivery artifact: None.
 - Standards and specifications: `MAINTENANCE.md`.
@@ -53,11 +53,11 @@
 ## Current State
 
 - Completed: Environment setup, baseline build/start validation, VS Code tasks.
-- In progress: None; T1 webpack 4 to webpack 5 and T2 TypeScript 4.1 to 5.x migrations are complete.
-- Next action: T3 Electron 4 to latest LTS, only when explicitly started.
+- In progress: T3.1 Electron 4.2.12 to 43.4.1 compatibility migration.
+- Next action: Commit T3.1 after review; T3.2 runtime regression remains pending.
 - Blockers: None known.
-- Known risks: `workerize-loader` may require compatibility work; Electron 4 remains runtime-limited.
-- Delivery readiness: Ready for the webpack migration; development and production builds plus startup check pass.
+- Known risks: Broader runtime regression and packaging remain deferred to T3.2/T3.3.
+- Delivery readiness: T3.1 typecheck, build, and Electron startup pass; broader runtime regression is deferred to T3.2.
 
 ## Durable Decisions
 
@@ -80,3 +80,4 @@
 | 2026-08-21 | Migrated build chain to webpack 5 | Complete T1 | Upgraded webpack/loaders, adjusted CLI and loader options, verified builds |
 | 2026-08-21 | Bumped application version to 3.2.3 | Mark the webpack migration release | Updated `package.json` and `yarn.lock` |
 | 2026-08-21 | Migrated TypeScript to 5.9.3 | Complete T2 | Updated React 17 declaration packages, fixed strict return annotations, verified `tsc --noEmit` and `yarn build` |
+| 2026-08-22 | Migrated Electron to 43.4.1 compatibility mode | Complete T3.1 | Added `@electron/remote`, explicit webPreferences flags, cache IPC, and verified typecheck/build/startup |

@@ -1,7 +1,7 @@
 import * as React from "react";
 import Sortable from "react-sortablejs";
 import {existsSync} from "fs";
-import {remote} from "electron";
+import * as remote from "@electron/remote";
 
 import {
   Fab,

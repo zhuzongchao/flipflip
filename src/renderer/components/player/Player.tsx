@@ -1,4 +1,6 @@
-import {remote, webFrame} from 'electron';
+import {remote} from '@electron/remote';
+import {ipcRenderer} from 'electron';
+import {IPC} from '../../data/const';
 const {getCurrentWindow} = remote;
 import * as React from 'react';
 import {IdleTimer} from "./IdleTimer";
@@ -706,8 +708,7 @@ export default class Player extends React.Component {
     getCurrentWindow().setFullScreen(false);
     // Clear ALL the available browser caches
     global.gc();
-    webFrame.clearCache();
-    remote.getCurrentWindow().webContents.session.clearCache(() => {});
+    ipcRenderer.send(IPC.clearCache);
     if (this.props.preventSleep || this._powerSaveID != null) {
       remote.powerSaveBlocker.stop(this._powerSaveID);
       this._powerSaveID = null;

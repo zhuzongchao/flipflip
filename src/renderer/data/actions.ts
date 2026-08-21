@@ -1,4 +1,5 @@
-import {IncomingMessage, remote, webFrame} from "electron";
+import {IncomingMessage, webFrame} from "electron";
+import * as remote from "@electron/remote";
 import * as fs from "fs";
 import {existsSync, readFileSync} from "fs";
 import path, {sep} from 'path';
@@ -2350,7 +2351,7 @@ export function addSource(state: State, scene: Scene, type: string, ...args: any
       let vResult = remote.dialog.showOpenDialog(remote.getCurrentWindow(),
         {filters: [{name:'All Files (*.*)', extensions: ['*']}, {name: 'Video files', extensions: ['mp4', 'mkv', 'webm', 'ogv', 'mov']}, {name: 'Playlist files', extensions: ['asx', 'm3u8', 'pls', 'xspf']}], properties: ['openFile', 'multiSelections']});
       if (!vResult) return;
-      vResult = vResult.filter((r) => isVideo(r, true) || isVideoPlaylist(r, true));
+      vResult = vResult.filter((r: string) => isVideo(r, true) || isVideoPlaylist(r, true));
       if (scene != null) {
         return updateScene(state, scene, (s) => {
           addSources(s.sources, vResult, state.library);
@@ -2903,7 +2904,7 @@ export function exportScene(state: State, scene: Scene): Object {
   const sceneExport = JSON.stringify(allExports);
   const fileName = sceneCopy.name + "_export.json";
   remote.dialog.showSaveDialog(remote.getCurrentWindow(),
-    {filters: [{name: 'JSON Document', extensions: ['json']}], defaultPath: fileName}, (filePath) => {
+    {filters: [{name: 'JSON Document', extensions: ['json']}], defaultPath: fileName}, (filePath: string) => {
       if (filePath != null) {
         fs.writeFileSync(filePath, sceneExport);
       }
@@ -3133,7 +3134,7 @@ export function exportLibrary(state: State): Object {
   const libraryExport = JSON.stringify(state.library);
   const fileName = "library_export-" + new Date().getTime() + ".json";
   remote.dialog.showSaveDialog(remote.getCurrentWindow(),
-    {filters: [{name: 'JSON Document', extensions: ['json']}], defaultPath: fileName}, (filePath) => {
+    {filters: [{name: 'JSON Document', extensions: ['json']}], defaultPath: fileName}, (filePath: string) => {
       if (filePath != null) {
         fs.writeFileSync(filePath, libraryExport);
       }

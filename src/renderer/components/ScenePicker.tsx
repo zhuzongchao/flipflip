@@ -1,5 +1,6 @@
 import * as React from 'react';
-import {ipcRenderer, remote} from "electron";
+import {ipcRenderer} from "electron";
+import * as remote from "@electron/remote";
 import wretch from "wretch";
 import clsx from 'clsx';
 import Sortable from "react-sortablejs";

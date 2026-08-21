@@ -1,7 +1,7 @@
 import * as React from "react";
 import clsx from "clsx";
 import rimraf from "rimraf";
-import {remote} from "electron";
+import * as remote from "@electron/remote";
 import {existsSync} from "fs";
 import getFolderSize from "get-folder-size";
 

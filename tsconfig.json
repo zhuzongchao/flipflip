@@ -4,6 +4,8 @@
         "jsx": "react",
         "module": "ESNext",
         "moduleResolution": "node",
+        "baseUrl": ".",
+        "paths": { "@electron/remote": ["src/renderer/remoteCompat.ts"] },
         "noImplicitAny": true,
         "noImplicitThis": true,
         "skipLibCheck": true,

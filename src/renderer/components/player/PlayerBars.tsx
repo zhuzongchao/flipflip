@@ -1,5 +1,6 @@
 import * as React from "react";
-import {clipboard, nativeImage, remote} from "electron";
+import {clipboard, nativeImage} from "electron";
+import * as remote from "@electron/remote";
 const {getCurrentWindow, Menu, MenuItem, app} = remote;
 import clsx from "clsx";
 import fileURL from "file-url";
@@ -1017,7 +1018,7 @@ class PlayerBars extends React.Component {
           if (process.platform === "win32") {
             remote.shell.openExternal(getCachePath(source, this.props.config));
           } else {
-            remote.shell.openItem(getCachePath(source, this.props.config));
+            remote.shell.openPath(getCachePath(source, this.props.config));
           }
         }
       }));

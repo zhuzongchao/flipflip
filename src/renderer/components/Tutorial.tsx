@@ -1,6 +1,6 @@
 import * as React from "react";
 import clsx from "clsx";
-import {remote} from "electron";
+import * as remote from "@electron/remote";
 
 import {
   Button,

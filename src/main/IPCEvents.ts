@@ -1,11 +1,15 @@
-import { ipcMain, IpcMessageEvent } from 'electron'
+import { app, ipcMain, IpcMainEvent } from 'electron'
 
 import { createNewWindow } from './WindowManager'
 import {IPC} from "../renderer/data/const";
 
 // Define functions
-function onRequestCreateNewWindow(ev: IpcMessageEvent) {
+function onRequestCreateNewWindow(ev: IpcMainEvent) {
   createNewWindow();
+}
+
+function onRequestClearCache() {
+  require('electron').session.defaultSession.clearCache();
 }
 
 
@@ -18,11 +22,13 @@ export function initializeIpcEvents() {
 
   initialized = true;
   ipcMain.on(IPC.newWindow, onRequestCreateNewWindow);
+  ipcMain.on(IPC.clearCache, onRequestClearCache);
 }
 
 export function releaseIpcEvents() {
   if (initialized) {
     ipcMain.removeAllListeners(IPC.newWindow);
+    ipcMain.removeAllListeners(IPC.clearCache);
   }
 
   initialized = false;

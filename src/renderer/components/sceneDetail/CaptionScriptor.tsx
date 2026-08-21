@@ -1,5 +1,5 @@
 import * as React from "react";
-import {remote} from "electron";
+import * as remote from "@electron/remote";
 import wretch from "wretch";
 import clsx from "clsx";
 import fs from "fs";
@@ -922,7 +922,7 @@ class CaptionScriptor extends React.Component {
   onSaveAs() {
     this.onCloseDialog();
     remote.dialog.showSaveDialog(remote.getCurrentWindow(),
-      {filters: [{name: 'Text Document', extensions: ['txt']}], defaultPath: this.state.captionScript.url}, (filePath) => {
+      {filters: [{name: 'Text Document', extensions: ['txt']}], defaultPath: this.state.captionScript.url}, (filePath: string) => {
         if (filePath != null) {
           fs.writeFileSync(filePath, this.state.captionScript.script);
           const setURL = (script: CaptionScript) => {

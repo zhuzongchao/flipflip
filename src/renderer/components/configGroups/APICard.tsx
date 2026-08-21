@@ -1,6 +1,6 @@
 import * as React from "react";
 import clsx from "clsx";
-import {remote} from "electron";
+import * as remote from "@electron/remote";
 import {OAuth} from "oauth";
 import http from "http";
 import uuidv4 from "uuid/v4";

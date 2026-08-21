@@ -1,6 +1,6 @@
 import * as React from "react";
 import clsx from "clsx";
-import {remote} from "electron";
+import * as remote from "@electron/remote";
 const {getCurrentWindow, Menu, app} = remote;
 
 import { AppBar, Container, IconButton, Theme, Toolbar, Tooltip, Typography } from "@mui/material";

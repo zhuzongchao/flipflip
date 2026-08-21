@@ -62,6 +62,7 @@ let rendererConfig = {
     },
     resolve: {
         extensions: ['.js', '.json', '.ts', '.tsx'],
+        alias: { '@electron/remote$': path.resolve(__dirname, './src/renderer/remoteCompat.ts') },
     },
     externals: { 'react-native-fs': 'reactNativeFs' },
     module: {

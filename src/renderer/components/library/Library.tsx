@@ -4,7 +4,7 @@ import {readdir, readFileSync, unlinkSync} from "fs";
 import rimraf from "rimraf";
 import {move} from "fs-extra";
 import path from "path";
-import {remote} from "electron";
+import * as remote from "@electron/remote";
 import wretch from "wretch";
 
 import {

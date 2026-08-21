@@ -35,8 +35,11 @@ export function createNewWindow() {
     webPreferences: {
       nodeIntegration: true,
       nodeIntegrationInWorker: true,
+      sandbox: false,
+      contextIsolation: false,
     }
   });
+  require('@electron/remote/main').enable(newWindow.webContents);
 
   // Store this window in the map
   const windowId = newWindow.id;

@@ -1,5 +1,5 @@
 import * as React from "react";
-import {remote} from "electron";
+import * as remote from "@electron/remote";
 import path from 'path';
 import clsx from "clsx";
 import {parseBuffer, parseFile} from "music-metadata";

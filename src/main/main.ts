@@ -1,3 +1,5 @@
+require('@electron/remote/main').initialize();
+
 import { app, Menu, session } from 'electron';
 import { initializeIpcEvents, releaseIpcEvents } from './IPCEvents';
 import { createMainMenu, createMenuTemplate } from './MainMenu';

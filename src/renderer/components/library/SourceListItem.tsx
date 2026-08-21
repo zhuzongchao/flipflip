@@ -2,7 +2,7 @@ import * as React from "react";
 import clsx from "clsx";
 import {existsSync} from "fs";
 import * as path from "path";
-import {remote} from "electron";
+import * as remote from "@electron/remote";
 
 import {
   Badge,

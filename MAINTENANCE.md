@@ -51,7 +51,7 @@
   - webpack target：`electron-main` / `electron-renderer`，无需改
 
   子任务拆解（每步独立验证，通过后再下一步）：
-  - [ ] **T3.1 兼容模式跑通**：electron 升到最新稳定版 + 引入 `@electron/remote`
+  - [x] **T3.1 兼容模式跑通**：electron 43.4.1 + `@electron/remote`，完成类型检查、构建和启动验证
     （main 进程 initialize，渲染进程改 import 来源），WindowManager 显式加
     `sandbox: false, contextIsolation: false, nodeIntegration: true`（保持现状可跑）
   - [ ] **T3.2 运行时回归**：CDP 深度验收 + 人工过一遍核心功能

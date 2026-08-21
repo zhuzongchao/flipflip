@@ -1,5 +1,5 @@
 import * as React from "react";
-import {remote} from "electron";
+import * as remote from "@electron/remote";
 import {readFileSync} from "fs";
 import clsx from "clsx";
 import {parseFile} from "music-metadata";
@@ -198,7 +198,7 @@ class AudioEdit extends React.Component {
     let iResult = remote.dialog.showOpenDialog(remote.getCurrentWindow(),
       {filters: [{name:'All Files (*.*)', extensions: ['*']}, {name: 'Image files', extensions: ["gif", "png", "jpeg", "jpg", "webp", "tiff", "svg"]}], properties: ['openFile']});
     if (!iResult) return;
-    iResult = iResult.filter((i) => isImage(i, true));
+    iResult = iResult.filter((i: string) => isImage(i, true));
     if (iResult.length > 0) {
       const newAudio = this.state.audio;
       newAudio.thumb = generateThumbnailFile(this.props.cachePath, readFileSync(iResult[0]));

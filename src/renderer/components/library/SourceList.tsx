@@ -1,7 +1,7 @@
 import * as React from "react";
 import rimraf from "rimraf";
 import {existsSync, unlinkSync} from "fs";
-import {remote} from "electron";
+import * as remote from "@electron/remote";
 import {sortableContainer, sortableElement} from 'react-sortable-hoc';
 import AutoSizer from "react-virtualized-auto-sizer";
 import {FixedSizeList} from "react-window";
