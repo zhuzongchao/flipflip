@@ -9,6 +9,7 @@ let mainConfig = {
     output: {
         filename: 'main.bundle.js',
         path: __dirname + '/dist',
+        environment: { optionalChaining: false },
     },
     node: {
         __dirname: false,
@@ -54,6 +55,7 @@ let rendererConfig = {
     output: {
         filename: 'renderer.bundle.js',
         path: __dirname + '/dist',
+        environment: { optionalChaining: false },
     },
     node: {
         __dirname: false,
