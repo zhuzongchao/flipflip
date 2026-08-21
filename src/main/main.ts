@@ -1,6 +1,10 @@
 require('@electron/remote/main').initialize();
 
 import { app, Menu, session } from 'electron';
+
+// Disable GPU acceleration so the app runs in headless/VM environments
+// where the GPU process crashes on startup (common in sandboxes and RDP).
+app.disableHardwareAcceleration();
 import { initializeIpcEvents, releaseIpcEvents } from './IPCEvents';
 import { createMainMenu, createMenuTemplate } from './MainMenu';
 import {createNewWindow, startScene} from "./WindowManager";

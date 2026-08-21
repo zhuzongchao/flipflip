@@ -64,6 +64,9 @@
   - 新 Chromium 对 CSP/CORS 更严格，可能影响图源图片加载 → T3.2 重点观察
   - workerize-loader 的 worker 依赖 `nodeIntegrationInWorker` → sandbox:false 下应可用，出问题再单独处理
   - `webFrame.clearCache()` 若被移除，改走 IPC 调主进程 clearCache
+  - **无 GPU/沙箱环境启动崩溃**（`GPU process isn't usable. Goodbye.`）：
+    需 `--in-process-gpu --disable-gpu-compositing` 启动参数；已加 `app.disableHardwareAcceleration()`
+    兜底（main.ts，对正常环境无影响）
 - [ ] **T4: React 17 → 18**（T3 之后做，收益相对小，可延后）
 - [ ] **T5: 替换废弃依赖**：`request`（已废弃）、`twitter` 包等
 
