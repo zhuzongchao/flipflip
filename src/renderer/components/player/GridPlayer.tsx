@@ -125,7 +125,7 @@ class GridPlayer extends React.Component {
     this.props.scene.grid[0].length ? this.props.scene.grid.length : 1,
     width: this.props.scene.grid && this.props.scene.grid.length > 0 &&
     this.props.scene.grid[0].length > 0 ? this.props.scene.grid[0].length : 1,
-    sceneCopyGrid: this.props.scene.grid.map((r) => r.map((c) => null)) as Array<Array<React.ReactNode>>,
+    sceneCopyGrid: this.props.scene.grid.map((r): Array<React.ReactNode> => r.map((): React.ReactNode => null)) as Array<Array<React.ReactNode>>,
     isLoaded: new Array<Array<boolean>>(),
     hideCursor: false,
   };

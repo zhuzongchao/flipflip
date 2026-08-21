@@ -37,7 +37,7 @@
 - [x] **T1: webpack 4 → 5**（已完成，webpack 5 使用默认哈希，无需 legacy-provider）
   - 涉及：webpack、webpack-cli、html-webpack-plugin、css/sass/style-loader、
     ts-loader、workerize-loader（注意此库可能不兼容，需找替代）
-- [ ] **T2: TypeScript 4.1 → 5.x**
+- [x] **T2: TypeScript 4.1 → 5.x**（TypeScript 5.9.3；更新 React 17 对应声明包；`tsc --noEmit` 与开发构建均通过）
 - [ ] **T3: Electron 4 → 最新 LTS**（最大工程，单独分支慢慢来）
   - 已知破坏点：`remote` 模块已被移除（需改用 IPC / preload）、
     `nodeIntegration` 默认关闭、`contextIsolation` 默认开启

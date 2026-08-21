@@ -4,7 +4,7 @@
 
 - Purpose: FlipFlip desktop Electron application for organizing and playing image, video, audio, and script scenes.
 - Users: FlipFlip users and maintainers.
-- Current objective: Maintain the webpack 5 build chain and continue with the next roadmap item when requested.
+- Current objective: Maintain the webpack 5 build chain; T1 and T2 are complete.
 - Repository root: This directory.
 
 ## Scope And Constraints
@@ -53,8 +53,8 @@
 ## Current State
 
 - Completed: Environment setup, baseline build/start validation, VS Code tasks.
-- In progress: None; T1 webpack 4 to webpack 5 migration is complete.
-- Next action: T2 TypeScript 4.1 to 5.x, only when explicitly started.
+- In progress: None; T1 webpack 4 to webpack 5 and T2 TypeScript 4.1 to 5.x migrations are complete.
+- Next action: T3 Electron 4 to latest LTS, only when explicitly started.
 - Blockers: None known.
 - Known risks: `workerize-loader` may require compatibility work; Electron 4 remains runtime-limited.
 - Delivery readiness: Ready for the webpack migration; development and production builds plus startup check pass.
@@ -79,3 +79,4 @@
 | 2026-08-21 | Added project handover context | Make the project portable between sessions | Captures T1 baseline and validation commands |
 | 2026-08-21 | Migrated build chain to webpack 5 | Complete T1 | Upgraded webpack/loaders, adjusted CLI and loader options, verified builds |
 | 2026-08-21 | Bumped application version to 3.2.3 | Mark the webpack migration release | Updated `package.json` and `yarn.lock` |
+| 2026-08-21 | Migrated TypeScript to 5.9.3 | Complete T2 | Updated React 17 declaration packages, fixed strict return annotations, verified `tsc --noEmit` and `yarn build` |
