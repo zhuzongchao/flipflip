@@ -54,6 +54,11 @@
   - [x] **T3.1 兼容模式跑通**：electron 43.4.1 + `@electron/remote`，完成类型检查、构建和启动验证
     （main 进程 initialize，渲染进程改 import 来源），WindowManager 显式加
     `sandbox: false, contextIsolation: false, nodeIntegration: true`（保持现状可跑）
+  - [ ] **T3.1b 修复 dialog Promise 漏网（2026-08-22 验收发现，**必须做**）**：
+    `remoteCompat.ts` 的 `dialog: ... as any` 让类型检查失效，14 处 `showOpenDialog`
+    老同步写法全部漏网（CacheCard/AudioEdit/AudioLibrary/Library/ScriptLibrary/
+    SourceList/CaptionScriptor/GooninatorDialog/ScenePicker/actions.ts），
+    后果：**所有文件选择功能全挂**（选完文件无反应）。修复见下方 T3.1b 说明
   - [ ] **T3.2 运行时回归**：CDP 深度验收 + 人工过一遍核心功能
     （建窗口、播放场景、图片加载、设置持久化）
   - [ ] **T3.3 打包验证**：electron-packager 打出 exe 并安装运行（或换 electron-builder）
@@ -67,6 +72,38 @@
   - **无 GPU/沙箱环境启动崩溃**（`GPU process isn't usable. Goodbye.`）：
     需 `--in-process-gpu --disable-gpu-compositing` 启动参数；已加 `app.disableHardwareAcceleration()`
     兜底（main.ts，对正常环境无影响）
+
+### T3.1b 修复说明（Codex 必读）
+
+**症状**：升级后 app 能开，但"添加视频/音频/图片/字幕/缓存目录/场景导入"全部无反应
+（文件选择框能弹，选完文件没下文）。
+
+**根因**：`@electron/remote` 2.x 的 `dialog.showOpenDialog` 返回 `Promise<OpenDialogReturnValue>`，
+不再是 Electron 4 时代的 `string[]`。`remoteCompat.ts` 里 `dialog: ... as any` 把类型检查废了，
+导致 14 处老同步写法 `const x = dialog.showOpenDialog(...)` 全部漏网——拿到的是 Promise
+（永远 truthy），`if (!x) return` 拦不住，后续 `.filter`/`[0]` 全部无效。
+
+**修复方法**（全部 14 处，见任务清单）：每处改为 async/await 或 .then 处理，从
+`result.filePaths` 取路径数组：
+
+```ts
+// 老写法（坏）：
+const filePath = remote.dialog.showOpenDialog(win, opts);
+if (!filePath || !filePath.length) return;
+use(filePath[0]);
+
+// 新写法（对）：
+const result = await remote.dialog.showOpenDialog(win, opts);
+if (result.canceled || !result.filePaths.length) return;
+use(result.filePaths[0]);
+```
+
+注意：调用方函数需加 `async` 关键字；有 `updateLibrary/updateScene` 等返回值的
+reducer 调用，await 之后照常返回。**禁止用 `as any` 掩盖**——要把类型写对。
+
+**验证**：`npx tsc --noEmit` 零报错 + `npx yarn build` 零报错 + 手动测一遍
+"添加视频"能正常选文件并出现在列表里。
+
 - [ ] **T4: React 17 → 18**（T3 之后做，收益相对小，可延后）
 - [ ] **T5: 替换废弃依赖**：`request`（已废弃）、`twitter` 包等
 
