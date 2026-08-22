@@ -112,14 +112,23 @@ React 17 + MUI 5。
 
 **目标**：中英双语（默认英文，可切换中文），为后续更多语言铺路。
 
-**技术选型（推荐）**：`react-i18next` + `i18next`（React 17 兼容性好、社区最大、
-无 MUI 绑定；避免 react-intl 与 MUI 组件的互操作复杂度）。
+**技术选型（已搜索验证，2026-08-22 社区共识）**：`react-i18next` + `i18next`。
+- 对比结论：react-i18next 是 React 项目默认选择（社区最大/文档全/类组件 HOC 一等公民）；
+  react-intl 的 ICU 强项（复数/性别）对中英文是屠龙之技，反而多背 ICU 解析器包体；
+  LinguiJS 需构建期宏，侵入大。选 react-i18next。
+- **不用 `i18next-browser-languagedetector`**（那是 Web 用的）；桌面应用应读系统语言：
+  `app.getLocale()`（主进程通过 IPC 传给渲染进程）+ 设置项覆盖，持久化到配置
+- **必须用 TypeScript 类型化字典**：从 `en.ts` 导出 key 类型，`t()` 拼错 key 编译期报错，
+  杜绝"页面漏出原始 key"的运行时事故
+- 与 MUI 5 集成有现成最佳实践（官方指南 + 中文教程），照抄配置即可
 
 **改造步骤（Codex 按此执行）**：
 
-1. **基建**：装 `i18next react-i18next`；新建 `src/renderer/i18n.ts`（初始化、语言检测
-   默认 en、回退 en）；新建 `src/renderer/locales/en.ts` + `zh.ts`（结构化字典）
-2. **接入**：`src/renderer/index.tsx` 引入 i18n.ts；根组件包 `<I18nextProvider>`
+1. **基建**：装 `i18next react-i18next`；新建 `src/renderer/i18n.ts`（初始化、
+   默认 en、回退 en、**类型化 key**）；新建 `src/renderer/locales/en.ts` + `zh.ts`
+   （结构化字典，en.ts 同时导出 key 类型供 t() 校验）
+2. **接入**：`src/renderer/index.tsx` 引入 i18n.ts；根组件包 `<I18nextProvider>`；
+   初始语言 = 主进程 `app.getLocale()` 经 IPC 传入，设置项可覆盖并持久化
 3. **逐文件替换**（372 处，分批做，每批构建验证）：
    - JSX 文案：`Search` → `{t('search')}`，`t` 来自 `useTranslation()`
    - 类组件（无 hook）：用 `withTranslation()` HOC 或 `this.props.t`
