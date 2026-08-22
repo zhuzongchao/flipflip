@@ -1251,7 +1251,7 @@ class AudioLibrary extends React.Component {
     this.setState({importURL: type});
   }
 
-  onAddSource(type: string, e: MouseEvent) {
+  async onAddSource(type: string, e: MouseEvent) {
     this.onCloseDialog();
     switch (type) {
       case AF.url:
@@ -1260,10 +1260,10 @@ class AudioLibrary extends React.Component {
       case AF.audios:
         let aResult = new Array<string>();
         if (e.shiftKey) {
-          let adResult = remote.dialog.showOpenDialog(remote.getCurrentWindow(),
+          const adDialog = await remote.dialog.showOpenDialog(remote.getCurrentWindow(),
             {filters: [{name:'All Files (*.*)', extensions: ['*']}], properties: ['openDirectory', 'multiSelections']});
-          if (!adResult) return;
-          for (let path of adResult) {
+          if (adDialog.canceled) return;
+          for (let path of adDialog.filePaths) {
             if (fs.existsSync(path) && fs.lstatSync(path).isDirectory()) {
               aResult = aResult.concat(getFilesRecursively(path));
             } else {
@@ -1271,9 +1271,10 @@ class AudioLibrary extends React.Component {
             }
           }
         } else {
-          aResult = remote.dialog.showOpenDialog(remote.getCurrentWindow(),
+          const aDialog = await remote.dialog.showOpenDialog(remote.getCurrentWindow(),
             {filters: [{name: 'All Files (*.*)', extensions: ['*']}, {name: 'Audio files', extensions: ['mp3', 'm4a', 'wav', 'ogg']}], properties: ['openFile', 'multiSelections']});
-          if (!aResult) return;
+          if (aDialog.canceled) return;
+          aResult = aDialog.filePaths;
         }
         aResult = aResult.filter((r) => isAudio(r, true));
         this.setState({loadingSources: true});

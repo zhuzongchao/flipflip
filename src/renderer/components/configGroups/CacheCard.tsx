@@ -210,10 +210,10 @@ class CacheCard extends React.Component {
     this.changeKey('directory', "");
   }
 
-  onCacheDirChange() {
-    let result = remote.dialog.showOpenDialog(remote.getCurrentWindow(), {properties: ['openDirectory']});
-    if (!result || !result.length) return;
-    this.changeKey('directory', result[0]);
+  async onCacheDirChange() {
+    const result = await remote.dialog.showOpenDialog(remote.getCurrentWindow(), {properties: ['openDirectory']});
+    if (result.canceled || !result.filePaths.length) return;
+    this.changeKey('directory', result.filePaths[0]);
   }
 
   blurIntKey(key: string, e: MouseEvent) {

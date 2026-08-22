@@ -729,10 +729,10 @@ class SourceList extends React.Component {
     this.setState({sourceOptions: source, sourceOptionsType: getSourceType(source.url)});
   }
 
-  onOpenSubtitleFile() {
-    let result = remote.dialog.showOpenDialog(remote.getCurrentWindow(), {filters: [{name:'All Files (*.*)', extensions: ['*']}, {name: 'Web Video Text Tracks (WebVTT)', extensions: ['vtt']}], properties: ['openFile']});
-    if (!result || !result.length) return;
-    this.changeKey('subtitleFile', result[0]);
+  async onOpenSubtitleFile() {
+    const result = await remote.dialog.showOpenDialog(remote.getCurrentWindow(), {filters: [{name:'All Files (*.*)', extensions: ['*']}, {name: 'Web Video Text Tracks (WebVTT)', extensions: ['vtt']}], properties: ['openFile']});
+    if (result.canceled || !result.filePaths.length) return;
+    this.changeKey('subtitleFile', result.filePaths[0]);
   }
 
   onSourceInput(key: string, e: MouseEvent) {

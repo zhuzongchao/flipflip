@@ -54,7 +54,7 @@
   - [x] **T3.1 兼容模式跑通**：electron 43.4.1 + `@electron/remote`，完成类型检查、构建和启动验证
     （main 进程 initialize，渲染进程改 import 来源），WindowManager 显式加
     `sandbox: false, contextIsolation: false, nodeIntegration: true`（保持现状可跑）
-  - [ ] **T3.1b 修复 dialog Promise 漏网（2026-08-22 验收发现，**必须做**）**：
+  - [x] **T3.1b 修复 dialog Promise 漏网（2026-08-22 验收发现，**必须做**）**：
     `remoteCompat.ts` 的 `dialog: ... as any` 让类型检查失效，14 处 `showOpenDialog`
     老同步写法全部漏网（CacheCard/AudioEdit/AudioLibrary/Library/ScriptLibrary/
     SourceList/CaptionScriptor/GooninatorDialog/ScenePicker/actions.ts），

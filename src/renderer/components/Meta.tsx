@@ -51,6 +51,10 @@ export default class Meta extends React.Component {
     // So we simply call the function and setState(return value).
     // This is basically the Redux pattern with fewer steps.
     const result = fn(this.state, ...args);
+    if (result && typeof result.then === 'function') {
+      result.then((diff: Object) => this.setState(diff));
+      return;
+    }
     // run `window.logStateChanges = true` to see these
     if ((window as any).logStateChanges) {
       console.log(result);

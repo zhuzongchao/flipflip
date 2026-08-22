@@ -4,7 +4,7 @@
 
 - Purpose: FlipFlip desktop Electron application for organizing and playing image, video, audio, and script scenes.
 - Users: FlipFlip users and maintainers.
-- Current objective: Electron compatibility migration T3.1 on the `upgrade-electron` branch.
+- Current objective: Electron dialog Promise cleanup T3.1b on the `fix-dialog-promises` branch.
 - Repository root: This directory.
 
 ## Scope And Constraints
@@ -44,7 +44,7 @@
 ## Active Artifacts
 
 - Source input: `src/`.
-- Editable baseline: `upgrade-electron` at the T3.1 working tree.
+- Editable baseline: `fix-dialog-promises` at the T3.1b working tree.
 - Latest output: `dist/` (generated).
 - Latest delivery artifact: None.
 - Standards and specifications: `MAINTENANCE.md`.
@@ -53,11 +53,11 @@
 ## Current State
 
 - Completed: Environment setup, baseline build/start validation, VS Code tasks.
-- In progress: T3.1 Electron 4.2.12 to 43.4.1 compatibility migration.
-- Next action: Commit T3.1 after review; T3.2 runtime regression remains pending.
+- In progress: T3.1b conversion of all renderer dialog calls to Electron Promise APIs.
+- Next action: Commit T3.1b after review; T3.2 runtime regression remains pending.
 - Blockers: None known.
 - Known risks: Broader runtime regression and packaging remain deferred to T3.2/T3.3.
-- Delivery readiness: T3.1 typecheck, build, and Electron startup pass; broader runtime regression is deferred to T3.2.
+- Delivery readiness: T3.1b typecheck and build pass; broader runtime regression is deferred to T3.2.
 
 ## Durable Decisions
 
@@ -81,3 +81,4 @@
 | 2026-08-21 | Bumped application version to 3.2.3 | Mark the webpack migration release | Updated `package.json` and `yarn.lock` |
 | 2026-08-21 | Migrated TypeScript to 5.9.3 | Complete T2 | Updated React 17 declaration packages, fixed strict return annotations, verified `tsc --noEmit` and `yarn build` |
 | 2026-08-22 | Migrated Electron to 43.4.1 compatibility mode | Complete T3.1 | Added `@electron/remote`, explicit webPreferences flags, cache IPC, and verified typecheck/build/startup |
+| 2026-08-22 | Converted renderer dialog calls to Promise APIs | Complete T3.1b | Updated 14 `showOpenDialog` call sites to await `filePaths`; updated save dialogs and removed dialog `as any` typing |

@@ -862,15 +862,15 @@ class CaptionScriptor extends React.Component {
     }
   }
 
-  onConfirmOpen() {
+  async onConfirmOpen() {
     this.onCloseDialog();
-    let result = remote.dialog.showOpenDialog(remote.getCurrentWindow(),
+    const result = await remote.dialog.showOpenDialog(remote.getCurrentWindow(),
       {
         filters: [{name: 'All Files (*.*)', extensions: ['*']}, {name: 'Text Document', extensions: ['txt']}],
         properties: ['openFile']
       });
-    if (!result || !result.length) return;
-    const url = result[0];
+    if (result.canceled || !result.filePaths.length) return;
+    const url = result.filePaths[0];
     wretch(url)
       .get()
       .text(data => {
@@ -919,22 +919,20 @@ class CaptionScriptor extends React.Component {
     }
   }
 
-  onSaveAs() {
+  async onSaveAs() {
     this.onCloseDialog();
-    remote.dialog.showSaveDialog(remote.getCurrentWindow(),
-      {filters: [{name: 'Text Document', extensions: ['txt']}], defaultPath: this.state.captionScript.url}, (filePath: string) => {
-        if (filePath != null) {
-          fs.writeFileSync(filePath, this.state.captionScript.script);
-          const setURL = (script: CaptionScript) => {
-            script.url = filePath;
-            return script;
-          }
-          this.setState({captionScript: setURL(this.state.captionScript), scriptChanged: false});
-          return true;
-        } else {
-          return false;
-        }
-      });
+    const result = await remote.dialog.showSaveDialog(remote.getCurrentWindow(),
+      {filters: [{name: 'Text Document', extensions: ['txt']}], defaultPath: this.state.captionScript.url});
+    if (!result.canceled && result.filePath) {
+      fs.writeFileSync(result.filePath, this.state.captionScript.script);
+      const setURL = (script: CaptionScript) => {
+        script.url = result.filePath;
+        return script;
+      }
+      this.setState({captionScript: setURL(this.state.captionScript), scriptChanged: false});
+      return true;
+    }
+    return false;
   }
 
     onSaveToLibrary() {

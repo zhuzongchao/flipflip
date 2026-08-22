@@ -756,7 +756,7 @@ class ScriptLibrary extends React.Component {
     this.setState({filters: filters, displaySources: this.getDisplaySources()});
   }
 
-  onAddSource(type: string, e: MouseEvent) {
+  async onAddSource(type: string, e: MouseEvent) {
     this.onCloseDialog();
     switch (type) {
       case AF.url:
@@ -778,20 +778,21 @@ class ScriptLibrary extends React.Component {
       case AF.script:
         let aResult = new Array<string>();
         if (e.shiftKey) {
-          let adResult = remote.dialog.showOpenDialog(remote.getCurrentWindow(),
+          const adDialog = await remote.dialog.showOpenDialog(remote.getCurrentWindow(),
             {filters: [{name:'All Files (*.*)', extensions: ['*']}], properties: ['openDirectory', 'multiSelections']});
-          if (!adResult) return;
-          for (let path of adResult) {
+          if (adDialog.canceled) return;
+          for (let path of adDialog.filePaths) {
             if (fs.existsSync(path) && fs.lstatSync(path).isDirectory()) {
-              aResult = adResult.concat(getFilesRecursively(path));
+            aResult = aResult.concat(getFilesRecursively(path));
             } else {
               aResult.push(path);
             }
           }
         } else {
-          aResult = remote.dialog.showOpenDialog(remote.getCurrentWindow(),
+          const aDialog = await remote.dialog.showOpenDialog(remote.getCurrentWindow(),
             {filters: [{name: 'All Files (*.*)', extensions: ['*']}, {name: 'Text files', extensions: ['txt']}], properties: ['openFile', 'multiSelections']});
-          if (!aResult) return;
+          if (aDialog.canceled) return;
+          aResult = aDialog.filePaths;
         }
         aResult = aResult.filter((r) => isText(r, true));
         this.setState({loadingSources: true});

@@ -7,8 +7,8 @@ const api: any = require('../../node_modules/@electron/remote/renderer');
 export const remote = {
   getCurrentWindow: api.getCurrentWindow,
   app: api.getBuiltin('app'),
-  dialog: api.getBuiltin('dialog') as any,
-  shell: api.getBuiltin('shell') as any,
+  dialog: api.getBuiltin('dialog') as Electron.Dialog,
+  shell: api.getBuiltin('shell') as Electron.Shell,
   powerSaveBlocker: api.getBuiltin('powerSaveBlocker'),
 };
 export const getCurrentWindow = api.getCurrentWindow;

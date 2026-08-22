@@ -2259,7 +2259,7 @@ export function addScriptSingle(state: State) {
   return {route: state.route.concat(new Route({kind: 'scripts', value: null})), specialMode: SP.selectSingle, scriptSelected: new Array<string>()};
 }
 
-export function addSource(state: State, scene: Scene, type: string, ...args: any[]): Object {
+export async function addSource(state: State, scene: Scene, type: string, ...args: any[]): Promise<Object> {
   const handleArgs = (s: Scene) => {
     if (args.length > 0) {
       let importURL = args[0];
@@ -2336,8 +2336,9 @@ export function addSource(state: State, scene: Scene, type: string, ...args: any
       }
 
     case AF.directory:
-      let dResult = remote.dialog.showOpenDialog(remote.getCurrentWindow(), {properties: ['openDirectory', 'multiSelections']});
-      if (!dResult) return;
+      const dDialog = await remote.dialog.showOpenDialog(remote.getCurrentWindow(), {properties: ['openDirectory', 'multiSelections']});
+      if (dDialog.canceled) return {};
+      const dResult = dDialog.filePaths;
       if (scene != null) {
         return updateScene(state, scene, (s) => {
           addSources(s.sources, dResult, state.library);
@@ -2348,10 +2349,10 @@ export function addSource(state: State, scene: Scene, type: string, ...args: any
       }
 
     case AF.videos:
-      let vResult = remote.dialog.showOpenDialog(remote.getCurrentWindow(),
+      const vDialog = await remote.dialog.showOpenDialog(remote.getCurrentWindow(),
         {filters: [{name:'All Files (*.*)', extensions: ['*']}, {name: 'Video files', extensions: ['mp4', 'mkv', 'webm', 'ogv', 'mov']}, {name: 'Playlist files', extensions: ['asx', 'm3u8', 'pls', 'xspf']}], properties: ['openFile', 'multiSelections']});
-      if (!vResult) return;
-      vResult = vResult.filter((r: string) => isVideo(r, true) || isVideoPlaylist(r, true));
+      if (vDialog.canceled) return {};
+      const vResult = vDialog.filePaths.filter((r: string) => isVideo(r, true) || isVideoPlaylist(r, true));
       if (scene != null) {
         return updateScene(state, scene, (s) => {
           addSources(s.sources, vResult, state.library);
@@ -2362,9 +2363,10 @@ export function addSource(state: State, scene: Scene, type: string, ...args: any
       }
 
     case AF.videoDir:
-      let vdResult = remote.dialog.showOpenDialog(remote.getCurrentWindow(),
+      const vdDialog = await remote.dialog.showOpenDialog(remote.getCurrentWindow(),
         {filters: [{name:'All Files (*.*)', extensions: ['*']}], properties: ['openDirectory', 'multiSelections']});
-      if (!vdResult) return;
+      if (vdDialog.canceled) return {};
+      const vdResult = vdDialog.filePaths;
       let rvResult = new Array<string>();
       for (let path of vdResult) {
         if (fs.existsSync(path) && fs.lstatSync(path).isDirectory()) {
@@ -2835,7 +2837,7 @@ export function downloadSource(state: State, source: LibrarySource): Object {
   }
 }
 
-export function exportScene(state: State, scene: Scene): Object {
+export async function exportScene(state: State, scene: Scene): Promise<Object> {
   const scenesToExport = Array<Scene>();
   const gridsToExport = Array<SceneGrid>();
   const sceneCopy = JSON.parse(JSON.stringify(scene)); // Make a copy
@@ -2903,12 +2905,9 @@ export function exportScene(state: State, scene: Scene): Object {
   const allExports = (scenesToExport as Array<any>).concat(gridsToExport);
   const sceneExport = JSON.stringify(allExports);
   const fileName = sceneCopy.name + "_export.json";
-  remote.dialog.showSaveDialog(remote.getCurrentWindow(),
-    {filters: [{name: 'JSON Document', extensions: ['json']}], defaultPath: fileName}, (filePath: string) => {
-      if (filePath != null) {
-        fs.writeFileSync(filePath, sceneExport);
-      }
-  });
+  const result = await remote.dialog.showSaveDialog(remote.getCurrentWindow(),
+    {filters: [{name: 'JSON Document', extensions: ['json']}], defaultPath: fileName});
+  if (!result.canceled && result.filePath) fs.writeFileSync(result.filePath, sceneExport);
   return {};
 }
 
@@ -3130,15 +3129,12 @@ export function importScene(state: State, importScenes: any, addToLibrary: boole
   return {scenes: newScenes, grids: newGrids, route: [new Route({kind: 'scene', value: scene.id})]};
 }
 
-export function exportLibrary(state: State): Object {
+export async function exportLibrary(state: State): Promise<Object> {
   const libraryExport = JSON.stringify(state.library);
   const fileName = "library_export-" + new Date().getTime() + ".json";
-  remote.dialog.showSaveDialog(remote.getCurrentWindow(),
-    {filters: [{name: 'JSON Document', extensions: ['json']}], defaultPath: fileName}, (filePath: string) => {
-      if (filePath != null) {
-        fs.writeFileSync(filePath, libraryExport);
-      }
-    });
+  const result = await remote.dialog.showSaveDialog(remote.getCurrentWindow(),
+    {filters: [{name: 'JSON Document', extensions: ['json']}], defaultPath: fileName});
+  if (!result.canceled && result.filePath) fs.writeFileSync(result.filePath, libraryExport);
   return {};
 }
 
