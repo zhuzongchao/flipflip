@@ -104,6 +104,39 @@ reducer 调用，await 之后照常返回。**禁止用 `as any` 掩盖**——�
 **验证**：`npx tsc --noEmit` 零报错 + `npx yarn build` 零报错 + 手动测一遍
 "添加视频"能正常选文件并出现在列表里。
 
+### T6: 多语种改造（i18n，2026-08-22 需求，Codex 必读）
+
+**现状**：零 i18n 基础设施；渲染进程 372 处硬编码英文 UI 文案（86 个组件文件、
+含菜单/按钮/占位符/tooltip），主进程 MainMenu.ts 仅 2 个顶层标签（File/View）。
+React 17 + MUI 5。
+
+**目标**：中英双语（默认英文，可切换中文），为后续更多语言铺路。
+
+**技术选型（推荐）**：`react-i18next` + `i18next`（React 17 兼容性好、社区最大、
+无 MUI 绑定；避免 react-intl 与 MUI 组件的互操作复杂度）。
+
+**改造步骤（Codex 按此执行）**：
+
+1. **基建**：装 `i18next react-i18next`；新建 `src/renderer/i18n.ts`（初始化、语言检测
+   默认 en、回退 en）；新建 `src/renderer/locales/en.ts` + `zh.ts`（结构化字典）
+2. **接入**：`src/renderer/index.tsx` 引入 i18n.ts；根组件包 `<I18nextProvider>`
+3. **逐文件替换**（372 处，分批做，每批构建验证）：
+   - JSX 文案：`Search` → `{t('search')}`，`t` 来自 `useTranslation()`
+   - 类组件（无 hook）：用 `withTranslation()` HOC 或 `this.props.t`
+   - 属性值：`placeholder={"Search ..."}` → `placeholder={t('searchPlaceholder')}`
+   - 动态字符串（模板拼接）：整句作为 key 或用 i18next 插值 `{{name}}`
+4. **主进程菜单**：MainMenu.ts 的 label 传 key，由渲染进程发 IPC 动态更新
+   （或简单方案：菜单先用英文，后续再本地化）
+5. **语言切换**：设置页加语言下拉框（en/zh），切换后 `i18n.changeLanguage()` +
+   重渲染；持久化到 electron-store（与现有配置同机制）
+6. **数据字段（不翻译）**：图源名、文件名、API 参数、错误码等保持原样
+
+**验证**：切换中文后所有界面文案变中文、无 `key` 泄漏（页面上出现原始 key 即失败）、
+`npx tsc --noEmit` + `npx yarn build` 零报错、app 启动正常。
+
+**风险**：372 处替换工作量大（Codex 分批干）；类组件改造易漏 hook；动态字符串
+拼接处需人工判断；MUI 组件的 `title/label/aria-label` 属性也要覆盖。
+
 - [ ] **T4: React 17 → 18**（T3 之后做，收益相对小，可延后）
 - [ ] **T5: 替换废弃依赖**：`request`（已废弃）、`twitter` 包等
 
